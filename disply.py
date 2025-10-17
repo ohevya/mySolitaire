@@ -1,5 +1,7 @@
 from deck_ import Card
 
+
+
 def print_piles(piles):
     for i, pile in enumerate(piles, 1):
         print(f"\npile {i}: ", end =" " )
@@ -39,8 +41,7 @@ def print_board(foundationPiles, piles, position, deck):
     print_piles(piles)
 
     if position[0] != -1:
-        print(f"Card:fghj ", end=""), deck[position[0]].print_card()
-
+        print(f"Card: {deck[position[0]].card_info()}")
 
 
     

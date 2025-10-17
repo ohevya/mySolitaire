@@ -2,6 +2,7 @@ from deck_ import *
 from game import *
 from disply import *
 from piles import *
+from display_vis import main_loop
 
 
 
@@ -46,11 +47,12 @@ def loop():
         '0' : lambda: play(position, deck, played),
         '1' : lambda: flip(position, deck),
         '2' : lambda: print_played(played),
+        '3' : lambda: main_loop(foundationPiles, piles, position, deck),
     }
 
 
     while True:
-        answer = input("\n 0: play\n 1: flip\n 2: print played\n p: print deck\n q: Quit\n :")
+        answer = input("\n 0: play\n 1: flip\n 2: print played\n 3: display\n p: print deck\n q: Quit\n :")
         if answer in answer_key:
             answer_key[answer]()
         print_board(foundationPiles, piles, position, deck)
