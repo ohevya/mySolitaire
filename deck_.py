@@ -6,14 +6,8 @@ class Card:
         self.suit = suit
         self.face_up = face_up
 
-    def card_info(self):
-        face = "D"
-        if self.face_up: face = "U"
-
-        return f"{self.value}{self.suit}{face}"
-    
-    def print_card(self):
-        print(f"{self.value}{self.suit}", end=" ")
+    def cardStr(self):
+        return f"{self.value}{self.suit}"
 
 
 Picture_cards = {
@@ -52,3 +46,15 @@ def create_deck():
     shuffle_deck(deck)
 
     return deck
+
+def pile_set_up(deck):
+    plies = [[],[],[],[],[],[],[]]
+    i, j = 0,0
+
+    while i < 7:
+        for j in range(i+1):
+            plies[i].append(deck[0])
+            deck.pop(0)
+        plies[i][-1].face_up = True
+        i += 1
+    return plies

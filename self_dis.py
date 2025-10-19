@@ -26,7 +26,7 @@ class FoundationPiles(ttk.Frame):
 
         for i in range(4):
             try:
-                piles[i].configure("text", foundationPiles[i][-1].card_info()[:-1])
+                piles[i].configure("text", foundationPiles[i][-1].cardStr())
             except IndexError:
                 piles[i]["text"] = "None"
             piles[i].pack(side="left", padx=10, pady=5)
@@ -50,7 +50,7 @@ class Piles(ttk.Frame):
             pile.insert("1.0", f"Pile {i+1}:\n")
             for card in self.piles_data[i]:
                 if card.face_up:
-                    pile.insert("end", f"{card.card_info()[:-1]}\n")
+                    pile.insert("end", f"{card.cardStr()}\n")
                 else:
                     pile.insert("end", "##\n") 
             pile.configure(width=5, height=20)
@@ -78,7 +78,7 @@ class Hand(ttk.Frame):
     def update_card(self, extra= None):
 
         if self.position[0] != -1 and game.can_play(self.position, self.deck):
-            card = f"{self.deck[self.position[0]].card_info()[:-1]}\n can play"
+            card = f"{self.deck[self.position[0]].cardStr()}\n can play"
         elif extra:
             card = extra
         else:

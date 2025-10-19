@@ -1,6 +1,4 @@
-from deck_ import *
-from display import *
-from piles import *
+from deck_ import Card
 
 
 

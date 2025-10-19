@@ -1,6 +1,5 @@
 from self_dis import Display
-from piles import pile_set_up
-from deck_ import create_deck
+from deck_ import create_deck, pile_set_up
 
 deck = create_deck()
 position = [-1]
