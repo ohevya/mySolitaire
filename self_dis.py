@@ -5,6 +5,7 @@ import game
 class Display(ttk.Window):
     def __init__(self, foundationPiles, piles, position, deck):
         super().__init__()
+        ttk.Style("solar")
         self.title("solitaire display")
         self.geometry("800x1000")
 
