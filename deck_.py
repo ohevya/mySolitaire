@@ -4,6 +4,7 @@ class Card:
     def __init__(self, value, suit, face_up=True):
         self.value = value
         self.suit = suit
+        self.color = 'red' if suit in ('♦', '♥') else 'black'
         self.face_up = face_up
 
     def cardStr(self):
@@ -15,18 +16,19 @@ Picture_cards = {
     'A' : 1, 'J' : 11, 'Q' : 12,'K' : 13
 }
 
+def valueSwitch(value):
+    if value in Picture_cards:
+        return Picture_cards[value]
+    return value
+
+
 
 
 def generate_cards(values, suits):
     cards = []
     for suit in suits:
         for value in values:
-
-            if value in Picture_cards:
-                card_value = Picture_cards[value]
-            else:
-                card_value = value
-            cards.append(Card(card_value, suit))
+            cards.append(Card(valueSwitch(value), suit))
     return cards
 
 

@@ -1,4 +1,4 @@
-from deck_ import Card
+from deck_ import Card, valueSwitch
 
 
 
@@ -18,16 +18,25 @@ def flip(position, deck):
     else:
         position[0] += 3
 
+def can_play(position, deck, piles):
+    if position[0] == -1 or not deck[position[0]].face_up:
+        return [False]
+    return [canPlayOnPile(position, deck, piles[i]) for i in range(7)]
 
-def can_play(position, deck):
-    if position[0] != -1 and deck[position[0]].face_up == True:
+
+def canPlayOnPile(position, deck, pile):
+    cardToPlay = deck[position[0]]
+    if pile[-1].color == cardToPlay.color or valueSwitch(cardToPlay.value) != valueSwitch(pile[-1].value) - 1:
+        return False
+    else:
         return True
-    return False
+    
+            
 
 
 
 def play(position, deck, piles, i):
-    played = deck[position[0]]
+    cardToPlay = deck[position[0]]
     deck.pop(position[0])
     position[0] -= 1
-    piles[i].append(played)
+    piles[i].append(cardToPlay)

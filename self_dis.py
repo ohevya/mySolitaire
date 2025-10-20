@@ -1,6 +1,7 @@
 import tkinter as tk
 import ttkbootstrap as ttk
 import game
+from deck_ import Card
 
 class Display(ttk.Window):
     def __init__(self, foundationPiles, piles, position, deck):
@@ -14,7 +15,7 @@ class Display(ttk.Window):
 
         self.foundationPiles = FoundationPiles(foundationPiles, self)
         self.pilesW = Piles(piles, self)
-        self.hand = Hand(position, deck, self)
+        self.hand = Hand(piles, position, deck, self)
         self.options = Play_Options(self, position, deck, piles)
 
         self.mainloop()
@@ -60,10 +61,10 @@ class Piles(ttk.Frame):
 
 
 class Hand(ttk.Frame):
-    def __init__(self, position, deck, parent):
+    def __init__(self, piles, position, deck, parent):
         super().__init__(parent)
 
-        self.position, self.deck, self.parent, self.self = position, deck, parent, self
+        self.piles, self.position, self.deck, self.parent, self.self = piles, position, deck, parent, self
         
 
         ttk.Button(self, text= "play", command= lambda: self.play_press()).pack(side="left", padx= 5)
@@ -77,13 +78,18 @@ class Hand(ttk.Frame):
         self.pack()
         
     def update_card(self, extra= None):
-
-        if self.position[0] != -1 and game.can_play(self.position, self.deck):
-            card = f"{self.deck[self.position[0]].cardStr()}\n can play"
-        elif extra:
-            card = extra
+        if self.deck[self.position[0]].face_up:
+            card = f"{self.deck[self.position[0]].cardStr()}\n"
         else:
-            card = "##\n can't play"
+            card = "##\n"
+
+        if True in game.can_play(self.position, self.deck, self.piles):
+            card += " can play"
+        else:
+            card += " can't play"
+
+        if extra:
+            card = extra
 
         self.card_label["text"] = f"{card}"
 
@@ -92,7 +98,11 @@ class Hand(ttk.Frame):
         self.update_card(extra)
 
     def play_press(self):
-        if game.can_play(self.position, self.deck):
+        playable = game.can_play(self.position, self.deck, self.piles)
+        if True in playable:
+            for i, b in enumerate(self.parent.options.self.buttons):
+                if playable[i]:
+                    b.pack(side= "left" , padx = 5 , pady= 10)
             self.parent.options.pack()
 
 
@@ -100,13 +110,13 @@ class Play_Options(ttk.Frame):
     def __init__(self , parent, position, deck, piles):
         super().__init__(parent)
 
-        self.position, self.deck, self.piles, self.parent = position, deck, piles, parent
+        self.position, self.deck, self.piles, self.parent, self.self = position, deck, piles, parent, self
         
         self.buttons = [ttk.Button(self, text= f"piles {i + 1}", command= lambda i=i: self.button_press(i)) for i in range(7)]
-        for b in self.buttons:
-            b.pack(side= "left" , padx = 5 , pady= 10)
     def button_press(self, i):
         game.play(self.position, self.deck, self.piles, i)
+        for b in  self.buttons:
+            b.pack_forget()
         self.parent.options.pack_forget()
         self.parent.hand.self.update_card()
         self.parent.pilesW.self.update_piles()
