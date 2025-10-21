@@ -1,11 +1,12 @@
 import random
 
 class Card:
-    def __init__(self, value, suit, face_up=True):
+    def __init__(self, value, suit, face_up=True, connected=False):
         self.value = value
         self.suit = suit
         self.color = 'red' if suit in ('♦', '♥') else 'black'
         self.face_up = face_up
+        self.connected = connected
 
     def cardStr(self):
         return f"{self.value}{self.suit}"
@@ -38,6 +39,8 @@ def shuffle_deck(deck):
     random.shuffle(deck)
 
 
+def foundationSetup():
+    return [[Card(0, '♣')],[Card(0, '♦')],[Card(0, '♠')],[Card(0, '♥')]]
 
 def create_deck():
     values = set(range(1,14))
@@ -48,6 +51,7 @@ def create_deck():
     shuffle_deck(deck)
 
     return deck
+
 
 def pile_set_up(deck):
     plies = [[],[],[],[],[],[],[]]

@@ -12,6 +12,8 @@ class Display(ttk.Window):
 
         ttk.Label(self, text="Solitaire Game Display", font=("Arial", 24)).pack()
 
+        self.foundation, self.self = foundationPiles, self
+
 
         self.foundationPiles = FoundationPiles(foundationPiles, self)
         self.pilesW = Piles(piles, self)
@@ -24,15 +26,21 @@ class FoundationPiles(ttk.Frame):
     def __init__(self, foundationPiles, parent):
         super().__init__(parent)
 
-        piles = [ttk.Label(self) for _ in range(4)]
+        self.self = self
 
+        self.piles = [ttk.Label(self) for _ in range(4)]
+        self.update_foundations(foundationPiles)
+        
+    
+    def update_foundations(self, foundationPiles):
         for i in range(4):
-            try:
-                piles[i].configure("text", foundationPiles[i][-1].cardStr())
-            except IndexError:
-                piles[i]["text"] = "None"
-            piles[i].pack(side="left", padx=10, pady=5)
+            if len(foundationPiles[i]) == 1:
+                self.piles[i].configure(text= "empty")
+            else:
+                self.piles[i].configure(text= foundationPiles[i][-1].cardStr())
+            self.piles[i].pack(side="left", padx=10, pady=5)
         self.pack()
+
 
 class Piles(ttk.Frame):
     def __init__(self, piles, parent):
@@ -83,7 +91,7 @@ class Hand(ttk.Frame):
         else:
             card = "##\n"
 
-        if True in game.can_play(self.position, self.deck, self.piles):
+        if True in game.can_play(self.position, self.deck, self.piles, self.parent.self.foundation):
             card += " can play"
         else:
             card += " can't play"
@@ -98,8 +106,15 @@ class Hand(ttk.Frame):
         self.update_card(extra)
 
     def play_press(self):
-        playable = game.can_play(self.position, self.deck, self.piles)
-        if True in playable:
+        foundationPiles = self.parent.foundation
+        playable = game.can_play(self.position, self.deck, self.piles, foundationPiles)
+        if len(playable) == 4:
+            i = playable.index(True)
+            game.play(self.position, self.deck, foundationPiles, i)
+            self.parent.foundationPiles.self.update_foundations(foundationPiles)
+            self.parent.hand.self.update_card()
+
+        elif True in playable:
             for i, b in enumerate(self.parent.options.self.buttons):
                 if playable[i]:
                     b.pack(side= "left" , padx = 5 , pady= 10)

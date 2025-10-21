@@ -13,14 +13,14 @@ def flip(position, deck):
     if position[0] == len(deck) - 1:
         position[0] = -1
         return turn_deck_over(deck)
-    elif position[0] + 3 >= len(deck):
-        position[0] = len(deck) - 1
-    else:
-        position[0] += 3
+    position[0] += 1
 
-def can_play(position, deck, piles):
+def can_play(position, deck, piles, foundationPiles):
     if position[0] == -1 or not deck[position[0]].face_up:
         return [False]
+    foundation = [canPlayOnFoundation(position, deck, foundationPiles[i]) for i in range(4)]
+    if True in foundation:
+        return foundation
     return [canPlayOnPile(position, deck, piles[i]) for i in range(7)]
 
 
@@ -32,11 +32,20 @@ def canPlayOnPile(position, deck, pile):
         return True
     
             
+def canPlayOnFoundation(position, deck, foundationPile):
+    cardToPlay = deck[position[0]]
+    if foundationPile:
+        if valueSwitch(cardToPlay.value) - 1 == valueSwitch(foundationPile[-1].value)  and cardToPlay.suit == foundationPile[-1].suit:
+            return True
+        return False
+
 
 
 
 def play(position, deck, piles, i):
     cardToPlay = deck[position[0]]
+    cardToPlay.connected = True
     deck.pop(position[0])
     position[0] -= 1
     piles[i].append(cardToPlay)
+
