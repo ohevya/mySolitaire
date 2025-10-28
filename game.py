@@ -15,6 +15,7 @@ def flip(position, deck):
         return turn_deck_over(deck)
     position[0] += 1
 
+
 def can_play(position, deck, piles, foundationPiles):
     if position[0] == -1 or not deck[position[0]].face_up:
         return [False]
@@ -35,7 +36,7 @@ def canPlayOnPile(position, deck, pile):
 def canPlayOnFoundation(position, deck, foundationPile):
     cardToPlay = deck[position[0]]
     if foundationPile:
-        if valueSwitch(cardToPlay.value) - 1 == valueSwitch(foundationPile[-1].value)  and cardToPlay.suit == foundationPile[-1].suit:
+        if valueSwitch(cardToPlay.value) - 1 == valueSwitch(foundationPile[-1].value) and cardToPlay.suit == foundationPile[-1].suit:
             return True
         return False
 

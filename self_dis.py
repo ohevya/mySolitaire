@@ -1,6 +1,6 @@
 import tkinter as tk
 import ttkbootstrap as ttk
-from tkinter import Canvas, PhotoImage
+from PIL import Image, ImageTk
 import game
 
 
@@ -73,12 +73,14 @@ class Hand(ttk.Frame):
     def __init__(self, piles, position, deck, parent):
         super().__init__(parent)
 
-        self.piles, self.position, self.deck, self.parent, self.self = piles, position, deck, parent, self
+        global card
+
+        self.piles, self.position, self.deck, self.parent = piles, position, deck, parent
         
 
         ttk.Button(self, text= "play", command= lambda: self.play_press()).pack(side="left", padx= 5)
 
-        self.card_label = ttk.Label(self, text= "none")
+        self.card_label = ttk.Label(self, text= "none", compound="top")
         self.card_label.pack(side="left", padx= 5)
 
         ttk.Button(self, text= "flip", command= lambda: self.flip_press()).pack(side="left", padx= 5)
@@ -87,20 +89,23 @@ class Hand(ttk.Frame):
         self.pack()
         
     def update_card(self, extra= None):
-        if self.deck[self.position[0]].face_up:
-            card = f"{self.deck[self.position[0]].cardStr()}\n"
-        else:
-            card = "##\n"
-
-        if True in game.can_play(self.position, self.deck, self.piles, self.parent.self.foundation):
-            card += " can play"
-        else:
-            card += " can't play"
+        #global card
 
         if extra:
-            card = extra
+            card_status = extra
+            card = resizeImage("images/deck_flipped.png")
+        else:
+            if self.deck[self.position[0]].face_up:
+                card = resizeImage(self.deck[self.position[0]].cardPng())
+            else:
+                card = resizeImage("images/card_back.png")
 
-        self.card_label["text"] = f"{card}"
+            if True in game.can_play(self.position, self.deck, self.piles, self.parent.foundation):
+                card_status = "can play"
+            else:
+                card_status = "can't play"
+
+        self.card_label.configure(text=card_status, image= card)
 
     def flip_press(self):
         extra = game.flip(self.position, self.deck)
@@ -112,11 +117,11 @@ class Hand(ttk.Frame):
         if len(playable) == 4:
             i = playable.index(True)
             game.play(self.position, self.deck, foundationPiles, i)
-            self.parent.foundationPiles.self.update_foundations(foundationPiles)
-            self.parent.hand.self.update_card()
+            self.parent.foundationPiles.update_foundations(foundationPiles)
+            self.parent.hand.update_card()
 
         elif True in playable:
-            for i, b in enumerate(self.parent.options.self.buttons):
+            for i, b in enumerate(self.parent.options.buttons):
                 if playable[i]:
                     b.pack(side= "left" , padx = 5 , pady= 10)
             self.parent.options.pack()
@@ -134,5 +139,13 @@ class Play_Options(ttk.Frame):
         for b in  self.buttons:
             b.pack_forget()
         self.parent.options.pack_forget()
-        self.parent.hand.self.update_card()
-        self.parent.pilesW.self.update_piles()
+        self.parent.hand.update_card()
+        self.parent.pilesW.update_piles()
+
+def resizeImage(path):
+    card = Image.open(path)
+    card = card.resize((80,120))
+
+    global img
+    img = ImageTk.PhotoImage(card)
+    return img

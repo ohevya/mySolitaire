@@ -4,19 +4,31 @@ class Card:
     def __init__(self, value, suit, face_up=True, connected=False):
         self.value = value
         self.suit = suit
-        self.cardStr = lambda : f"{self.value}_of_{self.suit}"
+        self.color = "red" if suit in ("hearts", "diamonds") else "black"
+        self.cardStr = lambda : f"{self.value}{suitSwitch(self.suit)}"
+        self.cardPng = lambda : f"images/{self.value}_of_{self.suit}.png"
         self.face_up = face_up
         self.connected = connected
+    def card_Back(self):
+        return "images/card_back.png"
 
 
 Picture_cards = {
-    1 : 'A', 11 : 'J', 12 : 'Q', 13 : 'K',
-    'A' : 1, 'J' : 11, 'Q' : 12,'K' : 13
+    1 : 'ace', 11 : 'jack', 12 : 'queen', 13 : 'king',
+    'ace' : 1, 'jack' : 11, 'queen' : 12,'king' : 13
 }
 
 def valueSwitch(value):
     if value in Picture_cards:
         return Picture_cards[value]
+    return value
+
+def suitSwitch(value):
+    suits = {
+    "hearts" : '♥', "diamonds" : '♦' , "clubs" : '♣', "spades" : '♠'
+    }
+    if value in suits:
+        return suits[value]
     return value
 
 
@@ -37,11 +49,11 @@ def shuffle_deck(deck):
 
 
 def foundationSetup():
-    return [[Card(0, '♣')],[Card(0, '♦')],[Card(0, '♠')],[Card(0, '♥')]]
+    return [[Card(0, 'clubs')],[Card(0, 'diamonds')],[Card(0, 'spades')],[Card(0, 'hearts')]]
 
 def create_deck():
     values = set(range(1,14))
-    suits = ("♣", "♦", "♠", "♥")
+    suits = ("clubs", "diamonds", "spades", "hearts")
 
     deck = generate_cards(values, suits)
 
