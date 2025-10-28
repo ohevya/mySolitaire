@@ -13,10 +13,11 @@ class Display(ttk.Window):
 
         ttk.Label(self, text="Solitaire Game Display", font=("Arial", 24)).pack()
 
-        self.foundation, self.self = foundationPiles, self
+        self.self, self.foundationPiles = self, foundationPiles
 
 
-        self.foundationPiles = FoundationPiles(foundationPiles, self)
+        self.foundationPilesW = FoundationPiles(foundationPiles, self)
+        self.foundationPilesW.pack()
         self.pilesW = Piles(piles, self)
         self.hand = Hand(piles, position, deck, self)
         self.options = Play_Options(self, position, deck, piles)
@@ -27,20 +28,21 @@ class FoundationPiles(ttk.Frame):
     def __init__(self, foundationPiles, parent):
         super().__init__(parent)
 
-        self.self = self
-
         self.piles = [ttk.Label(self) for _ in range(4)]
         self.update_foundations(foundationPiles)
         
     
     def update_foundations(self, foundationPiles):
+        global fou
+        fou = [None] * 4
+
         for i in range(4):
             if len(foundationPiles[i]) == 1:
-                self.piles[i].configure(text= "empty")
+                fou[i] = resizeImage("images/empty.png")
             else:
-                self.piles[i].configure(text= foundationPiles[i][-1].cardStr())
-            self.piles[i].pack(side="left", padx=10, pady=5)
-        self.pack()
+                fou[i] = resizeImage(foundationPiles[i][-1].cardPng())
+            self.piles[i].configure(image= fou[i])
+            self.piles[i].grid(row=0, column= i)
 
 
 class Piles(ttk.Frame):
@@ -73,8 +75,6 @@ class Hand(ttk.Frame):
     def __init__(self, piles, position, deck, parent):
         super().__init__(parent)
 
-        global card
-
         self.piles, self.position, self.deck, self.parent = piles, position, deck, parent
         
 
@@ -89,7 +89,7 @@ class Hand(ttk.Frame):
         self.pack()
         
     def update_card(self, extra= None):
-        #global card
+        global card
 
         if extra:
             card_status = extra
@@ -100,7 +100,7 @@ class Hand(ttk.Frame):
             else:
                 card = resizeImage("images/card_back.png")
 
-            if True in game.can_play(self.position, self.deck, self.piles, self.parent.foundation):
+            if True in game.can_play(self.position, self.deck, self.piles, self.parent.foundationPiles):
                 card_status = "can play"
             else:
                 card_status = "can't play"
@@ -112,12 +112,12 @@ class Hand(ttk.Frame):
         self.update_card(extra)
 
     def play_press(self):
-        foundationPiles = self.parent.foundation
+        foundationPiles = self.parent.foundationPiles
         playable = game.can_play(self.position, self.deck, self.piles, foundationPiles)
         if len(playable) == 4:
             i = playable.index(True)
             game.play(self.position, self.deck, foundationPiles, i)
-            self.parent.foundationPiles.update_foundations(foundationPiles)
+            self.parent.foundationPilesW.update_foundations(foundationPiles)
             self.parent.hand.update_card()
 
         elif True in playable:

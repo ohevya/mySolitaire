@@ -38,7 +38,7 @@ def generate_cards(values, suits):
     cards = []
     for suit in suits:
         for value in values:
-            cards.append(Card(valueSwitch(value), suit))
+            cards.append(valueSwitch(Card(valueSwitch(value), suit)))
     return cards
 
 
