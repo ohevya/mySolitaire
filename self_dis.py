@@ -2,7 +2,7 @@ import tkinter as tk
 import ttkbootstrap as ttk
 from tkinter import Canvas, PhotoImage
 import game
-from deck_ import Card
+
 
 class Display(ttk.Window):
     def __init__(self, foundationPiles, piles, position, deck):

@@ -4,12 +4,9 @@ class Card:
     def __init__(self, value, suit, face_up=True, connected=False):
         self.value = value
         self.suit = suit
-        self.color = 'red' if suit in ('♦', '♥') else 'black'
+        self.cardStr = lambda : f"{self.value}_of_{self.suit}"
         self.face_up = face_up
         self.connected = connected
-
-    def cardStr(self):
-        return f"{self.value}{self.suit}"
 
 
 Picture_cards = {
