@@ -109,7 +109,7 @@ class Piles(ttk.Frame):
                 self.piles_I.append(img)
                 
 
-                ttk.Label(frame, image= img).place(x=0, y= j*20)
+                tk.Button(frame, image= img, width= 80, height= 120).place(x=0, y= j*20)
             frame.pack(side= "left", padx= 10) 
 
 
@@ -123,7 +123,7 @@ class Hand(ttk.Frame):
         self.piles, self.position, self.deck, self.parent = piles, position, deck, parent
         
         self.cardImg = resizeImage("images/empty.png")
-        self.deckImg = resizeImage(self.deck[self.position[0]].cardPng())
+        self.deckImg = resizeImage(self.deck[self.position[0] + 1].cardPng())
 
         self.card_label = ttk.Button(self, text= "play", image= self.cardImg, compound="top", command= lambda: self.play_press())
         self.card_label.grid(row=1, column=1000, padx= 500)
@@ -154,7 +154,9 @@ class Hand(ttk.Frame):
             else:
                 card_status = "can't play"
 
-        if self.deck[self.position[0] + 1].face_up:
+        if self.position[0] + 1 == len(self.deck):
+            self.deckImg = resizeImage("images/deck_flipped.png")
+        elif self.deck[self.position[0] + 1].face_up:
             self.deckImg = resizeImage(self.deck[self.position[0] + 1].cardPng())
         else:
             self.deckImg = resizeImage("images/card_back.png")
@@ -208,7 +210,7 @@ class Play_Options(ttk.Frame):
         self.position, self.deck, self.piles, self.parent = position, deck, piles, parent
         
 
-        self.buttons = [ttk.Button(self, text= f"piles {i + 1}", command= lambda i=i: self.button_press(i)) for i in range(7)]
+        self.buttons = [ttk.Button(self, text= f"piles {i + 1}", bootstyle= "info", command= lambda i=i: self.button_press(i)) for i in range(7)]
 
     def button_press(self, i):
 
