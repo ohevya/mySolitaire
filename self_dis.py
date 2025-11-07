@@ -19,7 +19,7 @@ class Display(ttk.Window):
         self.geometry("800x1000")
 
 
-        ttk.Label(self, text="Solitaire Game Display", font=("Arial", 24)).pack()
+        ttk.Label(self, text="Solitaire Game Display", font=("Arial", 24)).place(x = 585, y=10)
 
 
         self.foundationPiles = foundationPiles
@@ -28,7 +28,7 @@ class Display(ttk.Window):
 
         self.foundationPilesW = FoundationPiles(foundationPiles, self)
 
-        self.foundationPilesW.pack()
+        self.foundationPilesW.place(x=480, y= 100)
 
         self.pilesW = Piles(piles, self)
 
@@ -84,7 +84,7 @@ class Piles(ttk.Frame):
         self.update_piles()
 
 
-        self.pack(pady=(30,0))
+        self.place(x=300, y=350)
 
     def update_piles(self):
         self.piles_I = []
@@ -125,16 +125,14 @@ class Hand(ttk.Frame):
         self.cardImg = resizeImage("images/empty.png")
         self.deckImg = resizeImage(self.deck[self.position[0] + 1].cardPng())
 
-        self.card_label = ttk.Button(self, text= "play", image= self.cardImg, compound="top", command= lambda: self.play_press())
-        self.card_label.grid(row=1, column=1000, padx= 500)
-
-
         self.deck_label = ttk.Button(self,text="flip", image= self.deckImg, compound="top", command= lambda: self.flip_press())
         self.deck_label.grid(row=0, column= 0)
 
+        self.card_label = ttk.Button(self, text= "play", image= self.cardImg, compound="top", command= lambda: self.play_press())
+        self.card_label.grid(row=1, column=0, pady=(10,0))
 
 
-        self.pack()
+        self.place(x= 5, y=5)
         
 
     def update_card(self, extra= None):
@@ -167,6 +165,8 @@ class Hand(ttk.Frame):
 
     def flip_press(self):
 
+        self.parent.options.place_forget()
+
         extra = game.flip(self.position, self.deck)
 
         self.update_card(extra)
@@ -195,9 +195,9 @@ class Hand(ttk.Frame):
 
                 if playable[i]:
 
-                    b.pack(side= "left" , padx = 5 , pady= 10)
+                    b.pack(padx = 5 , pady= 10)
 
-            self.parent.options.pack()
+            self.parent.options.place(x=20, y=350)
 
 
 
@@ -220,7 +220,7 @@ class Play_Options(ttk.Frame):
 
             b.pack_forget()
 
-        self.parent.options.pack_forget()
+        self.parent.options.place_forget()
 
         self.parent.hand.update_card()
 
