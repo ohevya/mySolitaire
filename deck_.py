@@ -6,7 +6,7 @@ def generate_cards(values, suits):
     cards = []
     for suit in suits:
         for value in values:
-            cards.append(valueSwitch(Card(valueSwitch(value), suit)))
+            cards.append(Card(value, suit))
     return cards
 
 
