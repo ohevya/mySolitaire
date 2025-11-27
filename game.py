@@ -1,6 +1,4 @@
-from deck_ import Card, valueSwitch
-
-
+from Card import valueSwitch
 
 def turn_deck_over(deck):
     deck.reverse()
@@ -27,10 +25,10 @@ def can_play(position, deck, piles, foundationPiles):
 
 def canPlayOnPile(position, deck, pile):
     cardToPlay = deck[position[0]]
-    if pile[-1].color == cardToPlay.color or valueSwitch(cardToPlay.value) != valueSwitch(pile[-1].value) - 1:
-        return False
-    else:
+    if pile[-1].color != cardToPlay.color and valueSwitch(cardToPlay.value) == valueSwitch(pile[-1].value) - 1:
         return True
+    else:
+        return False
     
             
 def canPlayOnFoundation(position, deck, foundationPile):

@@ -1,37 +1,5 @@
 import random
-
-class Card:
-    def __init__(self, value, suit, face_up=True, connected=False):
-        self.value = value
-        self.suit = suit
-        self.color = "red" if suit in ("hearts", "diamonds") else "black"
-        self.cardStr = lambda : f"{self.value}{suitSwitch(self.suit)}"
-        self.cardPng = lambda : f"images/{self.value}_of_{self.suit}.png"
-        self.face_up = face_up
-        self.connected = connected
-    def card_Back(self):
-        return "images/card_back.png"
-
-
-Picture_cards = {
-    1 : 'ace', 11 : 'jack', 12 : 'queen', 13 : 'king',
-    'ace' : 1, 'jack' : 11, 'queen' : 12,'king' : 13
-}
-
-def valueSwitch(value):
-    if value in Picture_cards:
-        return Picture_cards[value]
-    return value
-
-def suitSwitch(value):
-    suits = {
-    "hearts" : '♥', "diamonds" : '♦' , "clubs" : '♣', "spades" : '♠'
-    }
-    if value in suits:
-        return suits[value]
-    return value
-
-
+from Card import *
 
 
 def generate_cards(values, suits):

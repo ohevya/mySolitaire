@@ -1,8 +1,7 @@
 import tkinter as tk
 
 import ttkbootstrap as ttk
-
-from PIL import Image, ImageTk
+from Card import *
 import game
 
 
@@ -36,8 +35,6 @@ class Display(ttk.Window):
 
         self.options = Play_Options(self, position, deck, piles)
 
-        self.mainloop()
-
 
 class FoundationPiles(ttk.Frame):
 
@@ -59,14 +56,13 @@ class FoundationPiles(ttk.Frame):
         for i in range(4):
 
             if len(foundationPiles[i]) == 1:
-
                 self.fou[i] = resizeImage("images/empty.png")
-
             else:
+                self.fou[i] = foundationPiles[i][-1].get_front()
 
-                self.fou[i] = resizeImage(foundationPiles[i][-1].cardPng())
 
             self.piles[i].configure(image= self.fou[i])
+            self.piles[i].image = self.fou[i]
 
             self.piles[i].grid(row=0, column= i, padx= 20)
 
@@ -101,15 +97,10 @@ class Piles(ttk.Frame):
             ttk.Label(frame ,text = f"Pile {i+1}:").pack()
 
             for j, card in enumerate(self.piles_data[i]):
-
-                if card.face_up:
-                    img = resizeImage(card.cardPng())
-                else:
-                    img = resizeImage("images/card_back.png")
+                img = card.get_image()
+                tk.Button(frame, image=img, width=80, height=120).place(x=0, y=j*20)
                 self.piles_I.append(img)
-                
 
-                tk.Button(frame, image= img, width= 80, height= 120).place(x=0, y= j*20)
             frame.pack(side= "left", padx= 10) 
 
 
@@ -123,7 +114,7 @@ class Hand(ttk.Frame):
         self.piles, self.position, self.deck, self.parent = piles, position, deck, parent
         
         self.cardImg = resizeImage("images/empty.png")
-        self.deckImg = resizeImage(self.deck[self.position[0] + 1].cardPng())
+        self.deckImg = self.deck[self.position[0] + 1].get_image()
 
         self.deck_label = ttk.Button(self,text="flip", image= self.deckImg, compound="top", command= lambda: self.flip_press())
         self.deck_label.grid(row=0, column= 0)
@@ -141,11 +132,7 @@ class Hand(ttk.Frame):
             card_status = extra
             self.cardImg = resizeImage("images/deck_flipped.png")
         else:
-            if self.deck[self.position[0]].face_up:
-
-                self.cardImg = resizeImage(self.deck[self.position[0]].cardPng())
-            else:
-                self.cardImg = resizeImage("images/card_back.png")
+            self.cardImg = self.deck[self.position[0]].get_image()
 
             if True in game.can_play(self.position, self.deck, self.piles, self.parent.foundationPiles):
                 card_status = "can play"
@@ -154,10 +141,8 @@ class Hand(ttk.Frame):
 
         if self.position[0] + 1 == len(self.deck):
             self.deckImg = resizeImage("images/deck_flipped.png")
-        elif self.deck[self.position[0] + 1].face_up:
-            self.deckImg = resizeImage(self.deck[self.position[0] + 1].cardPng())
         else:
-            self.deckImg = resizeImage("images/card_back.png")
+            self.deckImg = self.deck[self.position[0] + 1].get_image()
 
         self.card_label.configure(text=card_status, image= self.cardImg)
         self.deck_label.configure(image= self.deckImg)
@@ -187,16 +172,10 @@ class Hand(ttk.Frame):
             self.parent.foundationPilesW.update_foundations(foundationPiles)
 
             self.parent.hand.update_card()
-
-
         elif True in playable:
-
             for i, b in enumerate(self.parent.options.buttons):
-
                 if playable[i]:
-
                     b.pack(padx = 5 , pady= 10)
-
             self.parent.options.place(x=20, y=350)
 
 
@@ -226,13 +205,4 @@ class Play_Options(ttk.Frame):
 
         self.parent.pilesW.update_piles()
 
-
-def resizeImage(path):
-
-    card = Image.open(path)
-    card = card.resize((80,120))
-    #global img
-
-    img = ImageTk.PhotoImage(card)
-    return img
 

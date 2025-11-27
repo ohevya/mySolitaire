@@ -7,4 +7,6 @@ piles = pile_set_up(deck)
 foundationPiles = foundationSetup()
 
 if __name__ == '__main__':
-    Display(foundationPiles, piles, position, deck)
+    main = Display(foundationPiles, piles, position, deck)
+    main.mainloop()
+    
