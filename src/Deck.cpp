@@ -2,23 +2,27 @@
 
 void Deck::_generateCards()
 {
-	sf::Texture back;
+	this->_textureList.push_back(sf::Texture());
+	sf::Texture& back = this->_textureList.back();
 
 	if (!back.loadFromFile("../images/card_back.png"))
 		std::cout << "Texture did  not load" << "\n";
-	for (int value{ 1 }; value < 14; value++)
+
+	for (int value{ 1 }; value <= 13; value++)
 	{
-		string cardPath = "../images/" + std::to_string(value) + "_of_";
 		for (int suit{ 1 }; suit <= 4; suit++)
 		{
+			this->_textureList.push_back(sf::Texture());
+			sf::Texture& front = this->_textureList.back();
+
 			string cardPath = "../images/" + std::to_string(value) + "_of_" + suitToString(suit) + ".png";
 
-			sf::Texture front;
 
 			if (!front.loadFromFile(cardPath))
 				std::cout << "Texture did  not load" << cardPath <<"\n";
 			else
 				this->_stock.push_back(new Card(front, back, value, suit));
+			
 		}
 	}
 }
@@ -31,7 +35,11 @@ void Deck::shuffleDeck()
 	std::bernoulli_distribution flip(0.5);
 	for (Card* card : this->_stock)
 	{
-		card->setFaceUpVar(flip(rng));
+		if (flip(rng))
+		{
+			card->flipCard();
+		}
+		
 
 	}
 	std::ranges::shuffle(this->_stock, rng);
@@ -41,6 +49,20 @@ Deck::Deck(int drawAmount):
 	_drawAmount(drawAmount)
 {
 	this->_generateCards();
+
+	this->_textureList.push_back(sf::Texture());
+	sf::Texture& empty = this->_textureList.back();
+
+	if (empty.loadFromFile("../images/empty.png"))
+		this->_empty = new Card(this->_wastePos, empty, empty,0, 0);
+
+	this->_textureList.push_back(sf::Texture());
+	sf::Texture& flip = this->_textureList.back();
+
+	if (flip.loadFromFile("../images/deck_flipped.png"))
+		this->_flipCards = new Card(this->_stockPos, flip, flip, 0, 0);
+
+
 	this->shuffleDeck();
 
 }
@@ -51,18 +73,35 @@ Deck::~Deck()
 		delete card;
 	for (auto& card : this->_waste)
 		delete card;
+	delete _empty;
+	delete _flipCards;
 }
 
 void Deck::update(const sf::RenderWindow& window)
-{
-	this->_stock.back()->setCardPos(this->_stockPos);
-	this->_stock.back()->setCardPos(this->_wastePos);
+{	
+	if (this->_stock.empty())
+		this->_flipCards->update(window, this->_stockPos);
+	else
+		this->_stock.back()->update(window, this->_stockPos);
+
+	if (this->_waste.empty())
+		this->_empty->update(window, this->_wastePos);
+	else
+		this->_waste.back()->update(window, this->_wastePos);
+	
 }
 
 void Deck::render(sf::RenderTarget& target)
 {
-	this->_stock.back()->render(target);
-	this->_waste.back()->render(target);
+	if (this->_stock.empty())
+		this->_empty->render(target);
+	else
+		this->_stock.back()->render(target);
+
+	if (this->_waste.empty())
+		this->_empty->render(target);
+	else
+		this->_waste.back()->render(target);
 }
 
 void Deck::nextCard()
@@ -83,4 +122,12 @@ void Deck::nextCard()
 void Deck::resetStock()
 {
 	this->_stock.swap(this->_waste);
+}
+
+void Deck::mouseRelesed(sf::Vector2f mousePos)
+{
+	if (this->_empty->getSprite().getGlobalBounds().contains(mousePos))// || this->_waste.back()->getSprite().getGlobalBounds().contains(mousePos))
+	{
+		this->nextCard();
+	}
 }

@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
-#include <ranges>
-
+#include <deque>
 #pragma once
+#include <ranges>
 #include <algorithm>
 #include <random>
 
@@ -14,10 +14,14 @@ class Deck
 {
 private:
 	int _drawAmount;
-	sf::Vector2f _stockPos = sf::Vector2f(300.f, 300.f);
-	sf::Vector2f _wastePos = sf::Vector2f(500.f, 500.f);
+	sf::Vector2f _stockPos = sf::Vector2f(50.f, 300.f);
+	sf::Vector2f _wastePos = sf::Vector2f(250.f, 300.f);
 	std::vector<Card*> _stock;
 	std::vector<Card*> _waste;
+	std::deque<sf::Texture> _textureList;
+
+	Card* _empty;
+	Card* _flipCards;
 
 
 
@@ -33,4 +37,5 @@ public:
 	void nextCard();
 	void resetStock();
 
+	void mouseRelesed(sf::Vector2f mousePos);
 };

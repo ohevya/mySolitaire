@@ -22,6 +22,8 @@ private:
 
 	sf::Sprite _cardSprite;
 
+	static Card* activeCard;
+
 public:
 	Card(sf::Vector2f mousePosView, sf::Texture& front, sf::Texture& back, int value, int suit);
 	Card(sf::Texture& front, sf::Texture& back, int value, int suit);
@@ -29,7 +31,8 @@ public:
 	const bool& isFaceUp() const;
 	void flipCard();
 
-	void update(const sf::RenderWindow& window);
+	void update(const sf::RenderWindow& window, sf::Vector2f& defultPos);
+
 	void render(sf::RenderTarget& target);
 
 	bool inClick(sf::Vector2f&  mousePos);
@@ -38,7 +41,7 @@ public:
 	void setFaceUpVar(bool value);
 	void setCardPos(sf::Vector2f cardPos);
 	//get
-	//sf::Sprite& getSprite();
+	sf::Sprite& getSprite();
 
 };
 
