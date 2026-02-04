@@ -7,16 +7,7 @@
 using std::string;
 enum Suits { hearts = 1, clubs, diamonds, spades };
 
-string suitToString(int& suit)
-{
-	switch (suit)
-	{
-	case 1: return "hearts";	break;
-	case 2: return "clubs";		break;
-	case 3: return "diamonds";	break;
-	case 4: return "spades";	break;
-	}
-}
+string suitToString(int suit);
 
 class Card
 {
@@ -45,6 +36,9 @@ public:
 
 	//set
 	void setFaceUpVar(bool value);
+	void setCardPos(sf::Vector2f cardPos);
+	//get
+	//sf::Sprite& getSprite();
 
 };
 

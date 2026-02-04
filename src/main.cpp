@@ -1,5 +1,6 @@
 #include <vector>
 #include "Card.h"
+#include "Deck.h"
 
 #define TIME_FLAG 1000
 
@@ -7,7 +8,7 @@
 int main()
 {
 
-	int keyTime = TIME_FLAG;
+	int BkeyTime = TIME_FLAG;
 	std::vector<Card*> cardVec;
 	//Card* card;
 
@@ -29,32 +30,21 @@ int main()
 		{
 			if (event->is<sf::Event::Closed>())
 				window.close();
-			if (event->is<sf::Event::MouseLeft>())
-			{
-				sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-
-				for (Card* card : cardVec)
-					if (card->inClick(mousePos))
-					{
-						card->flipCard();
-						
-					}
-			}
 		}
 
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::B) && keyTime >= TIME_FLAG)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::B) && BkeyTime >= TIME_FLAG)
 		{
 			sf::Vector2f mousePosView = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-			cardVec.push_back(new Card(mousePosView, front, back));
-			keyTime = 0;
+			cardVec.push_back(new Card(mousePosView, front, back, 1, 2));
+			BkeyTime = 0;
 		}
 
 		for(Card* card : cardVec)
 			card->update(window);
 
-		if (keyTime < TIME_FLAG)
-			keyTime++;
+		if (BkeyTime < TIME_FLAG)
+			BkeyTime++;
 
 
 		window.clear();

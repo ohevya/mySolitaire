@@ -1,14 +1,16 @@
 #include "Card.h"
 
-Card::Card(sf::Vector2f mousePosView, sf::Texture& front, sf::Texture& back, int value, int suit)
+Card::Card(sf::Vector2f cardPos, sf::Texture& front, sf::Texture& back, int value, int suit)
 	: _faceDownTexture(back), _faceUpTexture(front), _cardSprite(_faceDownTexture), _faceUp(false),  _value(value), _suit(suit)
 {
-	this->_cardSprite.setPosition(sf::Vector2f(mousePosView.x - this->_cardSprite.getGlobalBounds().size.x / 2.f , mousePosView.y - this->_cardSprite.getGlobalBounds().size.y / 2.f));
+	this->_cardSprite.setPosition(cardPos);
+	this->_cardSprite.setScale(sf::Vector2f(0.5f, 0.5f));
 }
 
 Card::Card(sf::Texture& front, sf::Texture& back, int value, int suit):
 	_faceDownTexture(back), _faceUpTexture(front), _cardSprite(_faceDownTexture), _faceUp(false), _value(value), _suit(suit)
 {
+	this->_cardSprite.setScale(sf::Vector2f(0.5f, 0.5f));
 }
 
 const bool& Card::isFaceUp() const
@@ -20,15 +22,9 @@ void Card::flipCard()
 {
 	this->_faceUp = !this->_faceUp;
 	if (this->_faceUp)
-	{
 		this->_cardSprite.setTexture(this->_faceUpTexture, true);
-		this->_cardSprite.setScale(sf::Vector2f(0.15f, 0.15f));
-	}
 	else
-	{
 		this->_cardSprite.setTexture(this->_faceDownTexture, true);
-		this->_cardSprite.setScale(sf::Vector2f(1, 1));
-	}
 }
 
 void Card::update(const sf::RenderWindow& window)
@@ -37,11 +33,7 @@ void Card::update(const sf::RenderWindow& window)
 
 	if (this->inClick(mousePosView))
 	{
-		//if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-		//{
-		//	this->flipCard();
-		//}
-		 if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
+		 if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 			this->_cardSprite.setPosition(sf::Vector2f(mousePosView.x - this->_cardSprite.getGlobalBounds().size.x / 2.f, mousePosView.y - this->_cardSprite.getGlobalBounds().size.y / 2.f));
 	}
 
@@ -62,4 +54,26 @@ bool Card::inClick(sf::Vector2f& mousePos)
 void Card::setFaceUpVar(bool value)
 {
 	this->_faceUp = value;
+}
+
+void Card::setCardPos(sf::Vector2f cardPos)
+{
+	this->_cardSprite.setPosition(cardPos);
+}
+
+//sf::Sprite& Card::getSprite()
+//{
+//	return this->_cardSprite;
+//}
+
+string suitToString(int suit)
+{
+	switch (suit)
+	{
+	case 1: return "hearts";	break;
+	case 2: return "clubs";		break;
+	case 3: return "diamonds";	break;
+	case 4: return "spades";	break;
+	}
+	return "Void";
 }

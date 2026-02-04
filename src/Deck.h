@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <ranges>
 
 #pragma once
 #include <algorithm>
@@ -12,13 +13,23 @@ enum Difcllty {DRAW_ONE = 1, DRAW_THREE = 3};
 class Deck
 {
 private:
-	int _difcllty;
+	int _drawAmount;
+	sf::Vector2f _stockPos = sf::Vector2f(300.f, 300.f);
+	sf::Vector2f _wastePos = sf::Vector2f(300.f, 300.f);
 	std::vector<Card*> _stock;
 	std::vector<Card*> _waste;
+
+
 
 	void _generateCards();
 	void shuffleDeck();
 public:
-	Deck(int& difcllty);
+	Deck(int& drawAmount);
+
+	void update(const sf::RenderWindow& window);
+	void render(sf::RenderTarget& target);
+
+	void nextCard();
+	void resetStock();
 
 };
