@@ -8,10 +8,10 @@ void Deck::_generateCards()
 		std::cout << "Texture did  not load" << "\n";
 	for (int value{ 1 }; value < 14; value++)
 	{
-		string cardPath = "../images/" + std::to_string(value) + "_";
+		string cardPath = "../images/" + std::to_string(value) + "_of_";
 		for (int suit{ 1 }; suit <= 4; suit++)
 		{
-			cardPath += suitToString(suit) + ".png";
+			string cardPath = "../images/" + std::to_string(value) + "_of_" + suitToString(suit) + ".png";
 
 			sf::Texture front;
 
@@ -37,12 +37,20 @@ void Deck::shuffleDeck()
 	std::ranges::shuffle(this->_stock, rng);
 }
 
-Deck::Deck(int& drawAmount):
+Deck::Deck(int drawAmount):
 	_drawAmount(drawAmount)
 {
 	this->_generateCards();
 	this->shuffleDeck();
 
+}
+
+Deck::~Deck()
+{
+	for (auto& card : this->_stock)
+		delete card;
+	for (auto& card : this->_waste)
+		delete card;
 }
 
 void Deck::update(const sf::RenderWindow& window)
