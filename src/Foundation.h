@@ -14,6 +14,5 @@ public:
 	void update(const sf::RenderWindow& window);
 	void render(sf::RenderTarget& target);
 
-	const sf::Sprite& getcardSprite() const;
-	Card& getcard();
+	Card& getCard();
 };

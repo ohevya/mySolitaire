@@ -8,7 +8,10 @@ Foundation::Foundation(sf::Vector2f pos):
 void Foundation::addNewCard(Card newCard)
 {
 	newCard._locked = true;
-	this->_foundation.push_back(newCard);
+	newCard.setCardPos(this->_pos);
+	if (!newCard.isFaceUp())
+		newCard.flipCard();
+	this->_foundation.push_back(std::move(newCard));
 }
 
 void Foundation::update(const sf::RenderWindow& window)
@@ -21,12 +24,8 @@ void Foundation::render(sf::RenderTarget& target)
 	this->_foundation.back().render(target);
 }
 
-const sf::Sprite& Foundation::getcardSprite() const
-{
-	return this->_foundation.back().getSprite();
-}
 
-Card& Foundation::getcard()
+Card& Foundation::getCard()
 {
 	return this->_foundation.back();
 }

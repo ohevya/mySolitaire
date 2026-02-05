@@ -1,20 +1,35 @@
 #include "Card.h"
+
 Card* Card::activeCard = nullptr;
 
-Card::Card(sf::Vector2f cardPos, sf::Texture& front, sf::Texture& back, int value, int suit)
-	: _faceDownTexture(back), _faceUpTexture(front), _cardSprite(_faceDownTexture),  _value(value), _suit(suit)
+Card::Card(sf::Vector2f cardPos, std::shared_ptr<sf::Texture> front, std::shared_ptr<sf::Texture> back, int value, int suit)
+	: _faceUpTexture(front)
+	, _faceDownTexture(back)
+	, _value(value)
+	, _suit(suit)
+	,_cardSprite(*this->_faceDownTexture)
 {
+	// initialize sprite with back texture if available
+	if (this->_faceDownTexture)
+		this->_cardSprite.setTexture(*this->_faceDownTexture, true);
+
 	this->_cardSprite.setPosition(cardPos);
 	this->_cardSprite.setScale(sf::Vector2f(0.25f, 0.25f));
 }
 
-Card::Card(sf::Texture& front, sf::Texture& back, int value, int suit):
-	_faceDownTexture(back), _faceUpTexture(front), _cardSprite(_faceDownTexture), _value(value), _suit(suit)
+Card::Card(std::shared_ptr<sf::Texture> front, std::shared_ptr<sf::Texture> back, int value, int suit)
+	: _faceUpTexture(front)
+	, _faceDownTexture(back)
+	, _value(value)
+	, _suit(suit)
+	, _cardSprite(*this->_faceDownTexture)
 {
+	// default to face-down texture if available
+	if (this->_faceDownTexture)
+		this->_cardSprite.setTexture(*this->_faceDownTexture, true);
+
 	this->_cardSprite.setScale(sf::Vector2f(0.25f, 0.25f));
 }
-
-
 
 const bool& Card::isFaceUp() const
 {
@@ -25,9 +40,15 @@ void Card::flipCard()
 {
 	this->_faceUp = !this->_faceUp;
 	if (this->_faceUp)
-		this->_cardSprite.setTexture(this->_faceUpTexture, true);
+	{
+		if (this->_faceUpTexture)
+			this->_cardSprite.setTexture(*this->_faceUpTexture, true);
+	}
 	else
-		this->_cardSprite.setTexture(this->_faceDownTexture, true);
+	{
+		if (this->_faceDownTexture)
+			this->_cardSprite.setTexture(*this->_faceDownTexture, true);
+	}
 }
 
 void Card::update(const sf::RenderWindow& window, sf::Vector2f& defaultPos)
@@ -54,9 +75,7 @@ void Card::render(sf::RenderTarget& target)
 
 bool Card::inClick(sf::Vector2f& mousePos)
 {
-	if (this->_cardSprite.getGlobalBounds().contains(mousePos))
-		return true;
-	return false;
+	return this->_cardSprite.getGlobalBounds().contains(mousePos);
 }
 
 void Card::setFaceUpVar(bool value)
@@ -98,7 +117,7 @@ Card& Card::operator=(const Card& other)
 	this->_value  = other._value;
 	this->_suit   = other._suit;
 
-
+	// copy shared ownership of textures
 	this->_faceUpTexture  = other._faceUpTexture;
 	this->_faceDownTexture = other._faceDownTexture;
 
@@ -112,7 +131,7 @@ string suitToString(int suit)
 	switch (suit)
 	{
 	case 1: return "hearts";
-	case 2: return "clubs";	
+	case 2: return "clubs";
 	case 3: return "diamonds";
 	case 4: return "spades";
 	}

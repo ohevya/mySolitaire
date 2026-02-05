@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <memory>
 #include "SFML/Graphics.hpp"
 
 using std::string;
@@ -16,25 +17,22 @@ private:
 	int _value;
 	int _suit;
 
-	sf::Texture& _faceUpTexture;
-	sf::Texture& _faceDownTexture;
+	std::shared_ptr<sf::Texture> _faceUpTexture;
+	std::shared_ptr<sf::Texture> _faceDownTexture;
 
 	sf::Sprite _cardSprite;
-
 
 public:
 	static Card* activeCard;
 	bool _locked = false;
 
-	Card(sf::Vector2f mousePosView, sf::Texture& front, sf::Texture& back, int value, int suit);
-	Card(sf::Texture& front, sf::Texture& back, int value, int suit);
-
-	/*Card(const Card& other);*/
+	Card(sf::Vector2f mousePosView, std::shared_ptr<sf::Texture> front, std::shared_ptr<sf::Texture> back, int value, int suit);
+	Card(std::shared_ptr<sf::Texture> front, std::shared_ptr<sf::Texture> back, int value, int suit);
 
 	const bool& isFaceUp() const;
 	void flipCard();
 
-	void update(const sf::RenderWindow& window, sf::Vector2f& defultPos);
+	void update(const sf::RenderWindow& window, sf::Vector2f& defaultPos);
 
 	void render(sf::RenderTarget& target);
 
@@ -49,7 +47,7 @@ public:
 	const int& getSuit() const;
 	Card& getCard();
 
-	//opreter
+	//operator
 	Card& operator=(const Card& other);
 
 };

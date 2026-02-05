@@ -12,7 +12,7 @@ int main()
 			if (event->is<sf::Event::Closed>())
 				window.close();
 			if (event->is<sf::Event::MouseButtonReleased>())
-				game.mouseRelesed(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+				game.mouseReleased(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
 				
 		}
 

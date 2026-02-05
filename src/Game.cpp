@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <iostream>
 
 Game::Game(int drawAmount)
 {
@@ -11,51 +12,54 @@ void Game::update(const sf::RenderWindow& window)
 {
 	this->_deck.update(window);
 
-	for (auto& fundation : this->_foundationArr)
-		fundation.update(window);
-
+	for (auto& foundation : this->_foundationArr)
+		foundation.update(window);
 }
 
 void Game::render(sf::RenderTarget& target)
 {
 	this->_deck.render(target);
 
-	for (auto& fundation : this->_foundationArr)
-		fundation.render(target);
+	for (auto& foundation : this->_foundationArr)
+		foundation.render(target);
 }
 
-void Game::mouseRelesed(sf::Vector2f mousePos)
+void Game::mouseReleased(sf::Vector2f mousePos)
 {
-	if (this->_deck.getEmpty().getSprite().getGlobalBounds().contains(mousePos))// || this->_waste.back()->getSprite().getGlobalBounds().contains(mousePos))
+	if (this->_deck.getEmpty().getCard().inClick(mousePos))
 	{
 		this->_deck.nextCard();
 		return ;
 	}
 
+	//face don to move
+
+	if (this->_deck.getWaste().empty() || !this->_deck.getWaste().back().isFaceUp())
+		return;
+
 	for (int i{}; i < 4; i++)
 	{
-		if (this->_foundationArr[i].getcardSprite().getGlobalBounds().contains(mousePos))
+		if (this->_foundationArr[i].getCard().inClick(mousePos))
 		{
-			this->moveFromWasteToFoundtion(i);
+			this->moveFromWasteToFoundation(i);
 			break;
 		}
 	}
 	
 }
 
-void Game::moveFromWasteToFoundtion(int i)
+void Game::moveFromWasteToFoundation(int i)
 {
 	auto& waste = this->_deck.getWaste();
 	if (waste.empty())
 		return;
 
-	Card& WCard = waste.back();
-	Card& FCard = this->_foundationArr[i].getcard();
+	Card WCard = waste.back();
+	Card& FCard = this->_foundationArr[i].getCard();
 
-	if (FCard.getSuit()  == WCard.getSuit() && FCard.getValue() - 1 == WCard.getValue())
+	if (FCard.getSuit()  == WCard.getSuit() && FCard.getValue() + 1 == WCard.getValue())
 	{
-		FCard = WCard;
-
+		this->_foundationArr[i].addNewCard(WCard);
 		this->_deck.getWaste().pop_back();
 	}
 }
@@ -63,51 +67,47 @@ void Game::moveFromWasteToFoundtion(int i)
 
 void Game::_generateCards()
 {
-	sf::Texture& back = this->loadtoTextureListFromFlie("card_back.png");
+	auto back = this->loadtoTextureListFromFile("card_back.png");
 
 	for (int suit{ 1 }; suit <= 4; suit++)
 	{
-		sf::Texture& front = this->loadtoTextureListFromFlie(1 , suit);
+		auto front = this->loadtoTextureListFromFile(1 , suit);
 		this->_foundationArr[suit - 1].addNewCard(Card(front, back, 1, suit));
-		this->_foundationArr[suit - 1].getcard().flipCard();
-		this->_foundationArr[suit - 1].getcard()._locked = true;
 
 		for (int value{ 2 }; value <= 13; value++)
 		{
-				sf::Texture& front = this->loadtoTextureListFromFlie(value, suit);
-				this->_deck.addNewCard(Card(front, back, value, suit));
-
+			auto frontVal = this->loadtoTextureListFromFile(value, suit);
+			this->_deck.addNewCard(Card(frontVal, back, value, suit));
 		} 
 	}
-	//first
-	sf::Texture& empty = this->loadtoTextureListFromFlie("empty.png");
+	// first 
+	auto empty = this->loadtoTextureListFromFile("empty.png");
 	this->_deck.addNewCardToTemps(Card(_deck.getWastePos(), empty, empty, 0, 0));
-	//last
-	sf::Texture& flip = this->loadtoTextureListFromFlie("deck_flipped.png");
+	// last 
+	auto flip = this->loadtoTextureListFromFile("deck_flipped.png");
 	this->_deck.addNewCardToTemps(Card(_deck.getStockPos(), flip, flip, 0, 0));
-
 }
 
-sf::Texture& Game::loadtoTextureListFromFlie(int value, int suit)
+std::shared_ptr<sf::Texture> Game::loadtoTextureListFromFile(int value, int suit)
 {
-	this->_textureList.push_back(sf::Texture());
+	auto tex = std::make_shared<sf::Texture>();
+	std::string texturePath = "../images/" + std::to_string(value) + "_of_" + suitToString(suit) + ".png";
 
-	string texturePath = "../images/" + std::to_string(value) + "_of_" + suitToString(suit) + ".png";
-
-	if (!this->_textureList.back().loadFromFile(texturePath))
+	if (!tex->loadFromFile(texturePath))
 		std::cerr << "not found path " << texturePath << "\n";
 
+	this->_textureList.push_back(tex);
 	return this->_textureList.back();
 }
 
-sf::Texture& Game::loadtoTextureListFromFlie(string fileName)
+std::shared_ptr<sf::Texture> Game::loadtoTextureListFromFile(const std::string& fileName)
 {
-	this->_textureList.push_back(sf::Texture());
+	auto tex = std::make_shared<sf::Texture>();
+	std::string texturePath = "../images/" + fileName;
 
-	string texturePath = "../images/" + fileName;
-
-	if (!this->_textureList.back().loadFromFile(texturePath))
+	if (!tex->loadFromFile(texturePath))
 		std::cerr << "not found path " << texturePath << "\n";
 
+	this->_textureList.push_back(tex);
 	return this->_textureList.back();
 }
