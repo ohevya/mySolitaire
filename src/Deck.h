@@ -16,20 +16,14 @@ private:
 	int _drawAmount;
 	sf::Vector2f _stockPos = sf::Vector2f(50.f, 300.f);
 	sf::Vector2f _wastePos = sf::Vector2f(250.f, 300.f);
-	std::vector<Card*> _stock;
-	std::vector<Card*> _waste;
-	std::deque<sf::Texture> _textureList;
+	std::vector<Card> _stock;
+	std::vector<Card> _waste;
 
-	Card* _empty;
-	Card* _flipCards;
+	std::vector<Card> _tempCards;
 
 
 
-	void _generateCards();
-	void shuffleDeck();
 public:
-	Deck(int drawAmount);
-	~Deck();
 
 	void update(const sf::RenderWindow& window);
 	void render(sf::RenderTarget& target);
@@ -37,5 +31,22 @@ public:
 	void nextCard();
 	void resetStock();
 
-	void mouseRelesed(sf::Vector2f mousePos);
+	void addNewCard(Card newCard);
+	void addNewCardToTemps(Card newCard);
+
+	void shuffleDeck();
+
+	//set
+	void setDrawAmount(int drawAmount);
+
+	//get
+	std::vector<Card>& getStock();
+	std::vector<Card>& getWaste();
+
+	Card& getEmpty();
+	Card& getFlipped();
+
+	sf::Vector2f& getStockPos();
+	sf::Vector2f& getWastePos();
+		
 };

@@ -4,6 +4,8 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Card.cpp" />
     <ClCompile Include="src\Deck.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Foundation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Card.h" />
@@ -109,6 +111,8 @@
     <ClInclude Include="include\SFML-3.0.2\include\SFML\System.hpp" />
     <ClInclude Include="include\SFML-3.0.2\include\SFML\Window.hpp" />
     <ClInclude Include="src\Deck.h" />
+    <ClInclude Include="src\Foundation.h" />
+    <ClInclude Include="src\Game.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\SFML-3.0.2\include\SFML\Audio\SoundFileFactory.inl" />

@@ -1,10 +1,10 @@
-#include "Deck.h"
+#include "Game.h"
 
 
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode({ 1920u, 1000u }), "Demo");
-	Deck deck(DRAW_THREE);
+	Game game(DRAW_ONE);
 	while (window.isOpen())
 	{
 		while (const std::optional event = window.pollEvent())
@@ -12,15 +12,15 @@ int main()
 			if (event->is<sf::Event::Closed>())
 				window.close();
 			if (event->is<sf::Event::MouseButtonReleased>())
-				deck.mouseRelesed(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+				game.mouseRelesed(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
 				
 		}
 
-		deck.update(window);
+		game.update(window);
 
 		window.clear(sf::Color(24, 120, 48));
 
-		deck.render(window);
+		game.render(window);
 
 		window.display();
 	}
