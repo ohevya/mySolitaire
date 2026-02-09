@@ -6,11 +6,13 @@ Game::Game(int drawAmount)
 	this->_generateCards();
 	this->_deck.shuffleDeck();
 	this->_deck.setDrawAmount(drawAmount);
+	this->_BuildTableau();
 }
 
 void Game::update(const sf::RenderWindow& window)
 {
 	this->_deck.update(window);
+	this->_tableau.update(window);
 
 	for (auto& foundation : this->_foundationArr)
 		foundation.update(window);
@@ -19,6 +21,7 @@ void Game::update(const sf::RenderWindow& window)
 void Game::render(sf::RenderTarget& target)
 {
 	this->_deck.render(target);
+	this->_tableau.render(target);
 
 	for (auto& foundation : this->_foundationArr)
 		foundation.render(target);
@@ -86,6 +89,21 @@ void Game::_generateCards()
 	// last 
 	auto flip = this->loadtoTextureListFromFile("deck_flipped.png");
 	this->_deck.addNewCardToTemps(Card(_deck.getStockPos(), flip, flip, 0, 0));
+}
+
+void Game::_BuildTableau()
+{
+	auto& stock = this->_deck.getStock();
+	for (int i{}; i < 7; i++)
+	{
+		for (int j{}; j <= i; j++)
+		{
+			this->_tableau[i].push_back(stock.back());
+			stock.pop_back();
+		}
+		if (!this->_tableau[i].back().isFaceUp())
+			this->_tableau[i].back().flipCard();
+	}
 }
 
 std::shared_ptr<sf::Texture> Game::loadtoTextureListFromFile(int value, int suit)

@@ -1,5 +1,6 @@
 #pragma once
 #include "Deck.h"
+#include "Tableau.h"
 #include "Foundation.h"
 // #include <memory>
 // #include <vector>
@@ -18,7 +19,11 @@ private:
 
 	std::vector<std::shared_ptr<sf::Texture>> _textureList;
 
+	Tableau _tableau;
+
 	void _generateCards();
+	void _BuildTableau();
+
 	std::shared_ptr<sf::Texture> loadtoTextureListFromFile(int value, int suit);
 	std::shared_ptr<sf::Texture> loadtoTextureListFromFile(const std::string& FileName);
 public:
