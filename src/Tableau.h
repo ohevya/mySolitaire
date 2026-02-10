@@ -10,6 +10,8 @@ public:
 	void update(const sf::RenderWindow& window);
 	void render(sf::RenderTarget& target);
 
+	void updateFromPos(int pileI, int startI);
+
 
 	std::vector<Card>& operator[](int index);
 

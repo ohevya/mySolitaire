@@ -35,4 +35,7 @@ public:
 	void mouseReleased(sf::Vector2f mousePos);
 
 	void moveFromWasteToFoundation(int i);
+	void moveFromPileToPile(int pileI);
+
+	int _startI{0}, _pileI{ -1 };
 };

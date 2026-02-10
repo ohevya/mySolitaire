@@ -11,11 +11,74 @@ Game::Game(int drawAmount)
 
 void Game::update(const sf::RenderWindow& window)
 {
-	this->_deck.update(window);
-	this->_tableau.update(window);
+	sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
-	for (auto& foundation : this->_foundationArr)
-		foundation.update(window);
+	bool mousePrresed = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
+
+
+	if (!mousePrresed)
+		Card::activeCard = nullptr;
+	else if (Card::activeCard == nullptr)
+	{
+		if (this->_deck.getEmpty().getCard().inClick(mousePos))
+		{
+			if (this->_deck.getWaste().empty())
+				Card::activeCard = &this->_deck.getEmpty();
+			else
+				Card::activeCard = &this->_deck.getWaste().back();
+			return;
+		}
+
+		if (this->_deck.getFlipped().getCard().inClick(mousePos))
+		{
+			if (this->_deck.getStock().empty())
+				Card::activeCard = &this->_deck.getFlipped();
+			else
+				Card::activeCard = &this->_deck.getStock().back();
+			return;
+		}
+
+		for (int i{}; i < 7; i++)
+		{
+			auto& currTableau = this->_tableau[i];
+
+			if (!currTableau.empty())
+				for (int j = std::ssize(currTableau) - 1; j >= 0; j--)
+				{
+					auto& currCard = currTableau[j];
+					if (currCard.inClick(mousePos))
+					{
+						Card::activeCard  = &currCard;
+
+						this->_startI = j;
+						this->_pileI = i;
+						
+						return;
+					}
+				}
+		}
+	}
+	else
+	{
+		sf::Sprite& activeSprite = Card::activeCard->getSprite();
+		activeSprite.setPosition(sf::Vector2f(mousePos.x - activeSprite.getGlobalBounds().size.x / 2.f, mousePos.y - activeSprite.getGlobalBounds().size.y / 2.f));
+
+		if (this->_pileI != -1)
+			this->_tableau.updateFromPos(this->_pileI, this->_startI);
+
+	}
+
+
+	if (Card::activeCard == nullptr)
+	{
+		this->_tableau.update(window);
+		this->_deck.update(window);
+		for (int i{}; i < 4; i++)
+			this->_foundationArr[i];
+
+		this->_startI = 0;
+		this->_pileI = -1;
+	}
 }
 
 void Game::render(sf::RenderTarget& target)
@@ -35,7 +98,24 @@ void Game::mouseReleased(sf::Vector2f mousePos)
 		return ;
 	}
 
-	//face don to move
+	if (this->_pileI != -1)
+	{
+		for (int i{}; i < 7; i++)
+		{
+			auto& currTableau = this->_tableau[i];
+
+			for (int j = { 0 }; j < currTableau.size(); j++)
+			{
+				if (currTableau[j].inClick(mousePos))
+				{
+					if (i == this->_pileI)
+						continue;
+					this->moveFromPileToPile(i);
+					return;
+				}
+			}
+		}
+	}
 
 	if (this->_deck.getWaste().empty() || !this->_deck.getWaste().back().isFaceUp())
 		return;
@@ -67,6 +147,21 @@ void Game::moveFromWasteToFoundation(int i)
 	}
 }
 
+void Game::moveFromPileToPile(int pileI)
+{
+	auto& destPile = this->_tableau[pileI];
+	auto& sourcePile = this->_tableau[this->_pileI];
+
+	if (!sourcePile[this->_startI].isFaceUp() || sourcePile[this->_startI].getValue() + 1 != destPile.back().getValue() || sourcePile[this->_startI].getSuit() % 2 == destPile.back().getSuit() % 2)
+		return;
+
+	for (int i{ this->_startI}; i < sourcePile.size(); i++)
+	{
+		destPile.push_back(sourcePile[i]);
+	}
+	sourcePile.erase(sourcePile.begin() + this->_startI, sourcePile.end());
+}
+
 
 void Game::_generateCards()
 {
@@ -93,16 +188,26 @@ void Game::_generateCards()
 
 void Game::_BuildTableau()
 {
+	float x{500};
+	float y{300};
+
+
 	auto& stock = this->_deck.getStock();
 	for (int i{}; i < 7; i++)
 	{
+		auto& currTableau = this->_tableau[i];
 		for (int j{}; j <= i; j++)
 		{
-			this->_tableau[i].push_back(stock.back());
+			currTableau.push_back(stock.back());
 			stock.pop_back();
+			currTableau.front().getSprite().setPosition(sf::Vector2f(x, y));
+			y += 35;
 		}
-		if (!this->_tableau[i].back().isFaceUp())
-			this->_tableau[i].back().flipCard();
+		if (!currTableau.back().isFaceUp())
+			currTableau.back().flipCard();
+
+		x += 150;
+		y = 300;
 	}
 }
 

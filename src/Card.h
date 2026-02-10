@@ -32,7 +32,7 @@ public:
 	const bool& isFaceUp() const;
 	void flipCard();
 
-	void update(const sf::RenderWindow& window, sf::Vector2f& defaultPos);
+	void update(const sf::RenderWindow& window, const sf::Vector2f& defaultPos);
 
 	void render(sf::RenderTarget& target);
 
@@ -42,7 +42,7 @@ public:
 	void setFaceUpVar(bool value);
 	void setCardPos(sf::Vector2f cardPos);
 	//get
-	const sf::Sprite& getSprite() const;
+	sf::Sprite& getSprite();
 	const int& getValue() const;
 	const int& getSuit() const;
 	Card& getCard();

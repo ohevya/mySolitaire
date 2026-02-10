@@ -9,13 +9,12 @@ void Tableau::update(const sf::RenderWindow& window)
 
 	for ( auto& pile : this->_piles)
 	{
-		y = 300;
 		for (auto& card : pile)
 		{
-			sf::Vector2f pos = sf::Vector2f(x, y);
-			card.update(window, pos);
+			card.update(window, sf::Vector2f( x, y ));
 			y += 35;
 		}
+		y = 300;
 		x += 150;
 	}
 }
@@ -28,6 +27,20 @@ void Tableau::render(sf::RenderTarget& target)
 		{
 			card.render(target);
 		}
+	}
+}
+
+void Tableau::updateFromPos(int pileI, int startI)
+{
+	auto& pile = this->_piles[pileI];
+
+	if (startI >= pile.size()) return;
+	sf::Vector2f pos = pile[startI].getSprite().getPosition();
+	
+	for (int i {startI + 1}; i < pile.size(); i++)
+	{
+		pos.y += 35;
+		pile[i].getSprite().setPosition(pos);
 	}
 }
 
