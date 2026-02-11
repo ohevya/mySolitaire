@@ -2,6 +2,7 @@
 #include "Deck.h"
 #include "Tableau.h"
 #include "Foundation.h"
+#include "OtherCards.h"
 // #include <memory>
 // #include <vector>
 // #include <string>
@@ -35,7 +36,13 @@ public:
 	void mouseReleased(sf::Vector2f mousePos);
 
 	void moveFromWasteToFoundation(int i);
+
+	void moveWasteToTableau(int pileI);
+
+	void moveFromPileToFoundation(int foundationI);
 	void moveFromPileToPile(int pileI);
+
+
 
 	int _startI{0}, _pileI{ -1 };
 };

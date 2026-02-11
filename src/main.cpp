@@ -1,8 +1,7 @@
 #include "Game.h"
 
 
-int main()
-{
+int main(){
 	sf::RenderWindow window(sf::VideoMode({ 1920u, 1000u }), "Demo");
 	Game game(DRAW_ONE);
 	while (window.isOpen())

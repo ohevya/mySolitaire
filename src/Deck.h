@@ -4,6 +4,7 @@
 #include <random>
 
 #include "card.h"
+#include "OtherCards.h"
 
 enum Difcllty {DRAW_ONE = 1, DRAW_THREE = 3};
 
@@ -11,16 +12,14 @@ class Deck
 {
 private:
 	int _drawAmount;
-	sf::Vector2f _stockPos = sf::Vector2f(50.f, 300.f);
-	sf::Vector2f _wastePos = sf::Vector2f(250.f, 300.f);
+	sf::Vector2f _stockPos { 50.f, 300.f };
+	sf::Vector2f _wastePos{ 250.f, 300.f };
 	std::vector<Card> _stock;
 	std::vector<Card> _waste;
 
-	std::vector<Card> _tempCards;
-
-
-
 public:
+
+	sf::FloatRect _wasteArea{ _wastePos, {125.f, 181.5f} };
 
 	void update(const sf::RenderWindow& window);
 	void render(sf::RenderTarget& target);
@@ -29,7 +28,6 @@ public:
 	void resetStock();
 
 	void addNewCard(Card newCard);
-	void addNewCardToTemps(Card newCard);
 
 	void shuffleDeck();
 
@@ -40,10 +38,8 @@ public:
 	std::vector<Card>& getStock();
 	std::vector<Card>& getWaste();
 
-	Card& getEmpty();
-	Card& getFlipped();
 
 	sf::Vector2f& getStockPos();
 	sf::Vector2f& getWastePos();
-		
+
 };

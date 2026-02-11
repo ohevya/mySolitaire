@@ -160,6 +160,7 @@
     <ClCompile Include="src\Foundation.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Source.cpp" />
     <ClCompile Include="src\Tableau.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -264,6 +265,7 @@
     <ClInclude Include="include\SFML-3.0.2\include\SFML\Window\WindowBase.hpp" />
     <ClInclude Include="include\SFML-3.0.2\include\SFML\Window\WindowEnums.hpp" />
     <ClInclude Include="include\SFML-3.0.2\include\SFML\Window\WindowHandle.hpp" />
+    <ClInclude Include="src\OtherCards.h" />
     <ClInclude Include="src\Card.h" />
     <ClInclude Include="src\Deck.h" />
     <ClInclude Include="src\Foundation.h" />

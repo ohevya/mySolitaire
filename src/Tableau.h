@@ -1,5 +1,6 @@
 #pragma once
 #include "Card.h"
+#include "OtherCards.h"
 
 class Tableau
 {
@@ -14,6 +15,7 @@ public:
 
 
 	std::vector<Card>& operator[](int index);
+	sf::FloatRect _pileRect[7]{};
 
 	Tableau();
 };
