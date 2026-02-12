@@ -5,6 +5,8 @@
 #include <memory>
 #include "SFML/Graphics.hpp"
 
+#include "Pos.h"
+
 using std::string;
 enum Suits { hearts = 1, clubs, diamonds, spades };
 
@@ -32,7 +34,7 @@ public:
 	const bool& isFaceUp() const;
 	void flipCard();
 
-	void update(const sf::RenderWindow& window, const sf::Vector2f& defaultPos);
+	void update(const sf::Vector2f& defaultPos);
 
 	void render(sf::RenderTarget& target);
 

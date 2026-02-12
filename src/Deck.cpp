@@ -34,40 +34,18 @@ std::vector<Card>& Deck::getWaste()
 {
 	return this->_waste;
 }
-sf::Vector2f& Deck::getStockPos()
-{
-	return this->_stockPos;
-}
 
-sf::Vector2f& Deck::getWastePos()
-{
-	return this->_wastePos;
-}
-
-
-
-
-//Deck::~Deck()
-//{
-//	for (auto& card : this->_stock)
-//		delete card;
-//	for (auto& card : this->_waste)
-//		delete card;
-//	delete _empty;
-//	delete _flipCards;
-//}
-
-void Deck::update(const sf::RenderWindow& window)
+void Deck::update()
 {	
 	if (this->_stock.empty())
-		OtherCards::getEmpty().setCardPos(this->_stockPos);
+		OtherCards::getEmpty().setCardPos(StockPos);
 	else
-		this->_stock.back().update(window, this->_stockPos);
+		this->_stock.back().update(StockPos);
 
 	if (this->_waste.empty())
 	{ }
 	else
-		this->_waste.back().update(window, this->_wastePos);
+		this->_waste.back().update(WastePos);
 	
 }
 
@@ -80,7 +58,7 @@ void Deck::render(sf::RenderTarget& target)
 
 	if (this->_waste.empty())
 	{
-		OtherCards::getEmpty().setCardPos(this->_wastePos);
+		OtherCards::getEmpty().setCardPos(WastePos);
 		OtherCards::getEmpty().render(target);
 	}
 	else

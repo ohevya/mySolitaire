@@ -270,9 +270,11 @@
     <ClInclude Include="src\Deck.h" />
     <ClInclude Include="src\Foundation.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\Pos.h" />
     <ClInclude Include="src\Tableau.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
     <None Include="include\SFML-3.0.2\include\SFML\Audio\SoundFileFactory.inl" />
     <None Include="include\SFML-3.0.2\include\SFML\Graphics\Color.inl" />
     <None Include="include\SFML-3.0.2\include\SFML\Graphics\Glsl.inl" />

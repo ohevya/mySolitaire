@@ -7,6 +7,7 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Foundation.cpp" />
     <ClCompile Include="src\Tableau.cpp" />
+    <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Card.h" />
@@ -115,7 +116,8 @@
     <ClInclude Include="src\Foundation.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\Tableau.h" />
-    <ClInclude Include="src\OtherCards.hpp" />
+    <ClInclude Include="src\OtherCards.h" />
+    <ClInclude Include="src\Pos.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\SFML-3.0.2\include\SFML\Audio\SoundFileFactory.inl" />
@@ -131,5 +133,6 @@
     <None Include="include\SFML-3.0.2\include\SFML\System\Vector3.inl" />
     <None Include="include\SFML-3.0.2\include\SFML\Window\Event.inl" />
     <None Include="include\SFML-3.0.2\include\SFML\Window\WindowBase.inl" />
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

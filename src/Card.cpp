@@ -51,21 +51,9 @@ void Card::flipCard()
 	}
 }
 
-void Card::update(const sf::RenderWindow& window, const sf::Vector2f& defaultPos)
+void Card::update(const sf::Vector2f& defaultPos)
 {
 	this->_cardSprite.setPosition(defaultPos);
-	//sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-
-	//if (activeCard == nullptr && !this->_locked  && this->inClick(mousePos) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-	//	Card::activeCard = this;
-
-	//if (Card::activeCard == this)
-	//{
-	//	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-	//	this->_cardSprite.setPosition(sf::Vector2f(mousePos.x - this->_cardSprite.getGlobalBounds().size.x / 2.f, mousePos.y - this->_cardSprite.getGlobalBounds().size.y / 2.f));
-	//else
-	//	Card::activeCard = nullptr;
-	//}
 }
 
 void Card::render(sf::RenderTarget& target)

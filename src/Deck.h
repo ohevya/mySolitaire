@@ -12,16 +12,13 @@ class Deck
 {
 private:
 	int _drawAmount;
-	sf::Vector2f _stockPos { 50.f, 300.f };
-	sf::Vector2f _wastePos{ 250.f, 300.f };
 	std::vector<Card> _stock;
 	std::vector<Card> _waste;
 
 public:
 
-	sf::FloatRect _wasteArea{ _wastePos, {125.f, 181.5f} };
 
-	void update(const sf::RenderWindow& window);
+	void update();
 	void render(sf::RenderTarget& target);
 
 	void nextCard();
@@ -37,9 +34,5 @@ public:
 	//get
 	std::vector<Card>& getStock();
 	std::vector<Card>& getWaste();
-
-
-	sf::Vector2f& getStockPos();
-	sf::Vector2f& getWastePos();
 
 };

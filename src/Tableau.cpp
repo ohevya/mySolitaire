@@ -1,9 +1,9 @@
 #include "Tableau.h"
 
-void Tableau::update(const sf::RenderWindow& window)
+void Tableau::update()
 {
-	float x{500};
-	float y{300};
+	float x = TableauX;
+	float y = TableauHeight;
 
 	
 
@@ -15,28 +15,27 @@ void Tableau::update(const sf::RenderWindow& window)
 		{
 			for (auto& card : pile)
 			{
-				card.update(window, sf::Vector2f(x, y));
-				y += 35;
+				card.update( sf::Vector2f(x, y));
+				y += CardHeightOffset;
 			}
 
 			if (!pile.back().isFaceUp())
 				pile.back().flipCard();
-			y = 300;
+			y = TableauHeight;
 		}
-		x += 150;
+		x += CardXoffset;
 	}
 }
 
 void Tableau::render(sf::RenderTarget& target)
 {
-	float x{ 500 };
-	float y{ 300 };
+	float x = TableauX;
 
 	for (auto& pile : this->_piles)
 	{
 		if (pile.empty())
 		{
-			OtherCards::getEmpty().setCardPos(sf::Vector2f(x, y));
+			OtherCards::getEmpty().setCardPos(sf::Vector2f(x, TableauHeight));
 			OtherCards::getEmpty().render(target);
 		}
 		else
@@ -44,7 +43,7 @@ void Tableau::render(sf::RenderTarget& target)
 			{
 				card.render(target);
 			}
-		x += 150;
+		x += CardXoffset;
 	}
 }
 
@@ -57,7 +56,7 @@ void Tableau::updateFromPos(int pileI, int startI)
 	
 	for (int i {startI + 1}; i < pile.size(); i++)
 	{
-		pos.y += 35;
+		pos.y += CardHeightOffset;
 		pile[i].getSprite().setPosition(pos);
 	}
 }
@@ -69,16 +68,15 @@ std::vector<Card>& Tableau::operator[](int index)
 
 Tableau::Tableau()
 {
-	this->_piles.resize(7);
+	this->_piles.resize(TableauSize);
 
-	float x{ 500 };
-	float y{ 300 };
+	float x = TableauX;
+	float y = TableauHeight;
 
 	for (int i{}; i < 7; i++)
 	{
 		this->_pileRect[i] = { {x, y}, {125.f, 181.5f}};
-		y = 300;
-		x += 150;
+		x += CardXoffset;
 	}
 
 }

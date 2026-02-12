@@ -7,15 +7,16 @@
 // #include <vector>
 // #include <string>
 
+
 class Game
 {
 private:
 	Deck _deck;
 	Foundation _foundationArr[4]{
-		  Foundation(sf::Vector2f(700.f,100.f)),
-		  Foundation(sf::Vector2f(850.f, 100.f)),
-		  Foundation(sf::Vector2f(1000.f, 100.f)),
-		  Foundation(sf::Vector2f(1150.f, 100.f))
+		  Foundation(FoundationPos[0]),
+		  Foundation(FoundationPos[1]),
+		  Foundation(FoundationPos[2]),
+		  Foundation(FoundationPos[3])
 	};
 
 	std::vector<std::shared_ptr<sf::Texture>> _textureList;

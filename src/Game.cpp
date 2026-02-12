@@ -20,7 +20,7 @@ void Game::update(const sf::RenderWindow& window)
 		Card::activeCard = nullptr;
 	else if (Card::activeCard == nullptr)
 	{
-		if (this->_deck._wasteArea.contains(mousePos))
+		if (WasteArea.contains(mousePos))
 		{
 			if (this->_deck.getWaste().empty())
 				Card::activeCard = &OtherCards::getEmpty();
@@ -71,8 +71,8 @@ void Game::update(const sf::RenderWindow& window)
 
 	if (Card::activeCard == nullptr)
 	{
-		this->_tableau.update(window);
-		this->_deck.update(window);
+		this->_tableau.update();
+		this->_deck.update();
 		for (int i{}; i < 4; i++)
 			this->_foundationArr[i];
 
@@ -92,7 +92,7 @@ void Game::render(sf::RenderTarget& target)
 
 void Game::mouseReleased(sf::Vector2f mousePos)
 {
-	if (this->_deck._wasteArea.contains(mousePos))
+	if (WasteArea.contains(mousePos))
 	{
 		if (this->_deck.getStock().empty())
 		{ 
@@ -205,6 +205,9 @@ void Game::moveWasteToTableau(int pileI)
 
 	Card& wasteCard = waste.back();
 
+	if (!wasteCard.isFaceUp())
+		return;
+
 	if (destPile.empty())
 		canMove = (wasteCard.getValue() == 13);
 	else
@@ -228,8 +231,6 @@ void Game::moveFromPileToFoundation(int foundationI)
 	Card PileBackCard = this->_tableau[this->_pileI].back().getCard();
 	Card& FoundationCard = this->_foundationArr[foundationI].getCard();
 
-	/*if (Card::activeCard != &PileBackCard)
-		return;*/
 
 	if (FoundationCard.getSuit() == PileBackCard.getSuit() && FoundationCard.getValue() + 1 == PileBackCard.getValue())
 	{
@@ -244,7 +245,7 @@ void Game::_generateCards()
 {
 	auto back = this->loadtoTextureListFromFile("card_back.png");
 
-	for (int suit{ 1 }; suit <= 4; suit++)
+	for (int suit{ 1 }; suit <= FoundationSize; suit++)
 	{
 		auto front = this->loadtoTextureListFromFile(1 , suit);
 		this->_foundationArr[suit - 1].addNewCard(Card(front, back, 1, suit));
@@ -259,17 +260,17 @@ void Game::_generateCards()
 	auto flip = this->loadtoTextureListFromFile("deck_flipped.png");
 
 
-	OtherCards::setTemps(new Card(_deck.getWastePos(), empty, empty, 0, 0), new Card(_deck.getStockPos(), flip, flip, 0, 0));
+	OtherCards::setTemps(new Card(WastePos, empty, empty, 0, 0), new Card(StockPos, flip, flip, 0, 0));
 }
 
 void Game::_BuildTableau()
 {
-	float x{500};
-	float y{300};
+	float x = TableauX;
+	float y = TableauHeight;
 
 
 	auto& stock = this->_deck.getStock();
-	for (int i{}; i < 7; i++)
+	for (int i{}; i < TableauSize; i++)
 	{
 		auto& currTableau = this->_tableau[i];
 		for (int j{}; j <= i; j++)
@@ -277,13 +278,13 @@ void Game::_BuildTableau()
 			currTableau.push_back(stock.back());
 			stock.pop_back();
 			currTableau.front().getSprite().setPosition(sf::Vector2f(x, y));
-			y += 35;
+			y += CardHeightOffset;
 		}
 		if (!currTableau.back().isFaceUp())
 			currTableau.back().flipCard();
 
-		x += 150;
-		y = 300;
+		x += CardXoffset;
+		y = TableauHeight;
 	}
 }
 

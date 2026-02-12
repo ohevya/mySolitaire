@@ -16,7 +16,7 @@ void Foundation::addNewCard(Card newCard)
 
 void Foundation::update(const sf::RenderWindow& window)
 {
-	this->_foundation.back().update(window, this->_pos);
+	this->_foundation.back().update( this->_pos);
 }
 
 void Foundation::render(sf::RenderTarget& target)
