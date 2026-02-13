@@ -291,7 +291,7 @@ void Game::_BuildTableau()
 std::shared_ptr<sf::Texture> Game::loadtoTextureListFromFile(int value, int suit)
 {
 	auto tex = std::make_shared<sf::Texture>();
-	std::string texturePath = "../images/" + std::to_string(value) + "_of_" + suitToString(suit) + ".png";
+	std::string texturePath = "images/" + std::to_string(value) + "_of_" + suitToString(suit) + ".png";
 
 	if (!tex->loadFromFile(texturePath))
 		std::cerr << "not found path " << texturePath << "\n";
@@ -303,7 +303,7 @@ std::shared_ptr<sf::Texture> Game::loadtoTextureListFromFile(int value, int suit
 std::shared_ptr<sf::Texture> Game::loadtoTextureListFromFile(const std::string& fileName)
 {
 	auto tex = std::make_shared<sf::Texture>();
-	std::string texturePath = "../images/" + fileName;
+	std::string texturePath = "images/" + fileName;
 
 	if (!tex->loadFromFile(texturePath))
 		std::cerr << "not found path " << texturePath << "\n";
