@@ -1,20 +1,20 @@
 [gd_scene format=3 uid="uid://bveilwt5aba64"]
 
-[ext_resource type="Script" uid="uid://drejfspp4v6e8" path="res://Scripts/CardManager.gd" id="1_ebmjs"]
+[ext_resource type="Script" uid="uid://dqw28lrw2w03b" path="res://Scripts/temp.gd" id="1_qxrlw"]
 [ext_resource type="PackedScene" uid="uid://dqg1rxty73316" path="res://Scenes/Card.tscn" id="2_qxrlw"]
 
 [node name="Game" type="Node2D" unique_id=1558064590]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1966483704]
-position = Vector2(-2, -2)
-scale = Vector2(1, 1.8127021)
-zoom = Vector2(0.1, 0.1)
+position = Vector2(15, -2)
+scale = Vector2(0.9771377, 1.7393824)
+zoom = Vector2(0.2, 0.2)
 
-[node name="CardManager" type="Node2D" parent="." unique_id=564209683]
-position = Vector2(-2, -2)
-scale = Vector2(1, 1.8127021)
-script = ExtResource("1_ebmjs")
+[node name="Node" type="Node" parent="." unique_id=1863195682]
+script = ExtResource("1_qxrlw")
 
-[node name="Sprite2D" parent="CardManager" unique_id=1133731004 instance=ExtResource("2_qxrlw")]
-position = Vector2(-2052, -777.8443)
-scale = Vector2(1, 0.5516626)
+[node name="CardEmty" parent="Node" unique_id=1812141496 instance=ExtResource("2_qxrlw")]
+position = Vector2(-1787, 716)
+
+[node name="CardAce" parent="Node" unique_id=196470322 instance=ExtResource("2_qxrlw")]
+position = Vector2(-2044, -682)
