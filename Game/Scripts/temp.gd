@@ -8,3 +8,4 @@ const _13_OF_HEARTS = preload("uid://v43yio7qf2l6")
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	card_ace.setup(_13_OF_HEARTS,  CARD_BACK, 1, 1)
+	card_ace.flip_card()

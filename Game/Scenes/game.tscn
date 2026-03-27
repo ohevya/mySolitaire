@@ -8,13 +8,19 @@
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1966483704]
 position = Vector2(15, -2)
 scale = Vector2(0.9771377, 1.7393824)
-zoom = Vector2(0.2, 0.2)
+zoom = Vector2(0.15, 0.15)
 
-[node name="Node" type="Node" parent="." unique_id=1863195682]
+[node name="Hand" type="Node" parent="." unique_id=1863195682]
 script = ExtResource("1_qxrlw")
 
-[node name="CardEmty" parent="Node" unique_id=1812141496 instance=ExtResource("2_qxrlw")]
-position = Vector2(-1787, 716)
+[node name="Waste" type="Node" parent="Hand" unique_id=789323480]
 
-[node name="CardAce" parent="Node" unique_id=196470322 instance=ExtResource("2_qxrlw")]
-position = Vector2(-2044, -682)
+[node name="CardEmty" parent="Hand/Waste" unique_id=1812141496 instance=ExtResource("2_qxrlw")]
+position = Vector2(-2088, -750)
+
+[node name="Stock" type="Node" parent="Hand" unique_id=266016941]
+
+[node name="CardAce" parent="Hand/Stock" unique_id=196470322 instance=ExtResource("2_qxrlw")]
+position = Vector2(-2871, -757)
+
+[node name="Tableau" type="Node" parent="." unique_id=1708655602]
